@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grammar AI — Grammar, Spelling & Writing Tools</title>
+  <meta name="description" content="Grammar AI checks grammar & spelling, counts words, converts case, and polishes writing — 100% free." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='%230ea5e9' d='M128 20c59.6 0 108 48.4 108 108s-48.4 108-108 108S20 187.6 20 128 68.4 20 128 20zm-6.8 54c-6.9 0-12.5 5.6-12.5 12.5S114.3 99 121.2 99s12.5-5.6 12.5-12.5S128.1 74 121.2 74zm67.6 74.9c0-31.4-25.5-56.9-56.9-56.9h-5.1c-8.8 0-16 7.2-16 16v5.6c0 6.4 3.8 12.1 9.6 14.7c19.2 8.8 32.7 28.3 32.7 51.1c0 4.4 3.6 8 8 8h8c10.5 0 19.1-8.6 19.1-19.1z'/%3E%3C/svg%3E" />
+  <!-- Tailwind CSS via CDN for quick, professional styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom highlight styles for grammar issues */
+    .underline-error { text-decoration: underline wavy #ef4444; }
+    .underline-style { text-decoration: underline wavy #f59e0b; }
+    .tooltip {
+      position: absolute; z-index: 50; background: #111827; color: white; font-size: 0.85rem;
+      padding: 0.5rem 0.6rem; border-radius: 0.5rem; max-width: 22rem; box-shadow: 0 10px 20px rgba(0,0,0,.15);
+    }
+    .preview-content { white-space: pre-wrap; word-break: break-word; }
+    .shadow-soft { box-shadow: 0 10px 25px rgba(2, 6, 23, 0.08); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-2xl bg-sky-500 grid place-items-center text-white font-bold">GA</div>
+        <div>
+          <h1 class="text-xl font-semibold tracking-tight">Grammar AI</h1>
+          <p class="text-xs text-slate-500 -mt-0.5">Free grammar, spelling & writing tools</p>
+        </div>
+      </div>
+      <nav class="hidden sm:flex items-center gap-3">
+        <a href="#tools" class="px-3 py-1.5 rounded-xl hover:bg-slate-100">Tools</a>
+        <a href="#how" class="px-3 py-1.5 rounded-xl hover:bg-slate-100">How it works</a>
+        <a href="#faq" class="px-3 py-1.5 rounded-xl hover:bg-slate-100">FAQ</a>
+        <a href="#" class="px-3 py-1.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-b from-white to-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="grid lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Write better, faster with <span class="text-sky-600">Grammar AI</span></h2>
+          <p class="mt-3 text-slate-600">Check grammar & spelling, count words, and convert text case — directly in your browser. No sign-up, no ads, 100% free.</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href="#editor" class="px-5 py-2.5 rounded-2xl bg-sky-600 text-white hover:bg-sky-500 shadow-soft">Open Editor</a>
+            <a href="#how" class="px-5 py-2.5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-100">Learn more</a>
+          </div>
+          <ul class="mt-6 grid sm:grid-cols-3 gap-3 text-sm text-slate-600">
+            <li class="p-3 rounded-xl bg-white border border-slate-200">Grammar Check</li>
+            <li class="p-3 rounded-xl bg-white border border-slate-200">Spelling Check</li>
+            <li class="p-3 rounded-xl bg-white border border-slate-200">Word & Character Count</li>
+            <li class="p-3 rounded-xl bg-white border border-slate-200">Case Converter</li>
+            <li class="p-3 rounded-xl bg-white border border-slate-200">Copy & Download</li>
+            <li class="p-3 rounded-xl bg-white border border-slate-200">Privacy-friendly</li>
+          </ul>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-soft">
+          <div class="text-sm text-slate-500">Live Preview</div>
+          <div class="mt-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <pre class="text-slate-700 text-sm whitespace-pre-wrap">Paste your text in the editor, hit <strong>Check Grammar</strong>, and see <span class="underline-error">issues highlighted</span> with suggestions.</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editor -->
+  <section id="editor" class="py-10" aria-label="Editor">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-3 gap-6">
+        <!-- Main editor card -->
+        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <h3 class="text-lg font-semibold">Grammar & Spelling Checker</h3>
+              <span id="statusBadge" class="hidden text-xs px-2 py-1 rounded-full bg-slate-100">Ready</span>
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+              <label for="lang" class="text-slate-500">Language</label>
+              <select id="lang" class="px-2 py-1.5 rounded-lg border border-slate-300 bg-white">
+                <option value="en-US">English (US)</option>
+                <option value="en-GB">English (UK)</option>
+                <option value="en">English (General)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2">
+            <!-- Textarea -->
+            <div class="p-4 sm:p-5">
+              <textarea id="inputText" class="w-full h-72 md:h-[28rem] resize-y rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-100 p-4 leading-6" placeholder="Paste or type your text here..."></textarea>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <button id="checkBtn" class="px-4 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-500">Check Grammar</button>
+                <button id="clearBtn" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200">Clear</button>
+                <button id="copyBtn" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200">Copy</button>
+                <button id="downloadBtn" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200">Download</button>
+              </div>
+            </div>
+            <!-- Preview with highlights -->
+            <div class="p-4 sm:p-5 border-t md:border-t-0 md:border-l border-slate-200">
+              <div class="text-sm text-slate-500 mb-2">Highlighted Preview</div>
+              <div id="preview" class="preview-content bg-slate-50 border border-slate-200 rounded-xl p-4 h-72 md:h-[28rem] overflow-auto"></div>
+            </div>
+          </div>
+
+          <div class="p-4 sm:p-5 border-t border-slate-200">
+            <h4 class="font-medium mb-2">Suggestions</h4>
+            <ul id="suggestions" class="text-sm grid gap-2"></ul>
+          </div>
+        </div>
+
+        <!-- Side tools -->
+        <aside class="bg-white border border-slate-200 rounded-2xl shadow-soft p-4 sm:p-5 space-y-5" id="tools">
+          <div>
+            <h3 class="font-semibold">Live Counters</h3>
+            <div class="mt-2 grid grid-cols-3 gap-2 text-center">
+              <div class="p-3 rounded-xl bg-slate-50 border"><div class="text-xs text-slate-500">Words</div><div id="wordCount" class="text-xl font-semibold">0</div></div>
+              <div class="p-3 rounded-xl bg-slate-50 border"><div class="text-xs text-slate-500">Chars</div><div id="charCount" class="text-xl font-semibold">0</div></div>
+              <div class="p-3 rounded-xl bg-slate-50 border"><div class="text-xs text-slate-500">Sentences</div><div id="sentCount" class="text-xl font-semibold">0</div></div>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-semibold">Case Converter</h3>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              <button data-case="upper" class="caseBtn px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">UPPERCASE</button>
+              <button data-case="lower" class="caseBtn px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">lowercase</button>
+              <button data-case="title" class="caseBtn px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">Title Case</button>
+              <button data-case="sentence" class="caseBtn px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">Sentence case</button>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-semibold">Clean-up Tools</h3>
+            <div class="mt-2 grid grid-cols-1 gap-2">
+              <button id="trimSpaces" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">Remove extra spaces</button>
+              <button id="removeBreaks" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">Remove line breaks</button>
+            </div>
+          </div>
+          <div class="text-xs text-slate-500">Grammar powered by public LanguageTool API. For heavy usage, consider self-hosting LanguageTool later.</div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="py-10 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold tracking-tight">How Grammar AI works</h3>
+      <ol class="mt-4 grid sm:grid-cols-3 gap-4 text-sm">
+        <li class="p-4 bg-white border border-slate-200 rounded-2xl"><span class="font-medium">1) Paste your text</span><br/>Type or paste any English text.</li>
+        <li class="p-4 bg-white border border-slate-200 rounded-2xl"><span class="font-medium">2) Click “Check Grammar”</span><br/>We send your text to LanguageTool API securely.</li>
+        <li class="p-4 bg-white border border-slate-200 rounded-2xl"><span class="font-medium">3) Fix with suggestions</span><br/>See highlights + suggested replacements.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-10">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold tracking-tight">FAQ</h3>
+      <div class="mt-4 grid gap-3">
+        <details class="bg-white border border-slate-200 rounded-2xl p-4">
+          <summary class="font-medium cursor-pointer">Is Grammar AI really free?</summary>
+          <p class="mt-2 text-sm text-slate-600">Yes. It runs entirely in your browser and uses LanguageTool’s public API for grammar checks (fair-use rate limits apply). Everything else runs offline.</p>
+        </details>
+        <details class="bg-white border border-slate-200 rounded-2xl p-4">
+          <summary class="font-medium cursor-pointer">Does my text get stored?</summary>
+          <p class="mt-2 text-sm text-slate-600">No. Your text is sent only to the grammar-check API for analysis and is not stored by this website. For sensitive content, you can skip grammar check and use offline tools (counters/case converter).</p>
+        </details>
+        <details class="bg-white border border-slate-200 rounded-2xl p-4">
+          <summary class="font-medium cursor-pointer">Can I use it for UK English?</summary>
+          <p class="mt-2 text-sm text-slate-600">Yes. Choose English (UK) from the language dropdown.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-10 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-500 flex items-center justify-between">
+      <p>© <span id="year"></span> Grammar AI. Built with ♥ for writers.</p>
+      <a class="hover:underline" href="#editor">Back to Editor</a>
+    </div>
+  </footer>
+
+  <script>
+    const input = document.getElementById('inputText');
+    const preview = document.getElementById('preview');
+    const suggestionsList = document.getElementById('suggestions');
+    const statusBadge = document.getElementById('statusBadge');
+    const lang = document.getElementById('lang');
+
+    const wordCountEl = document.getElementById('wordCount');
+    const charCountEl = document.getElementById('charCount');
+    const sentCountEl = document.getElementById('sentCount');
+
+    const year = document.getElementById('year');
+    year.textContent = new Date().getFullYear();
+
+    // Live counters
+    function updateCounters() {
+      const text = input.value;
+      const words = (text.trim().match(/\b\w+\b/g) || []).length;
+      const chars = text.length;
+      const sentences = (text.match(/[.!?](\s|$)/g) || []).length || (text.trim() ? 1 : 0);
+      wordCountEl.textContent = words;
+      charCountEl.textContent = chars;
+      sentCountEl.textContent = sentences;
+      // Mirror into preview (plain) until checked
+      preview.textContent = text || 'Preview will appear here with highlights after you click "Check Grammar".';
+    }
+
+    input.addEventListener('input', updateCounters);
+    document.addEventListener('DOMContentLoaded', updateCounters);
+
+    // Case converter helpers
+    function toTitleCase(s){
+      return s.toLowerCase().replace(/(^|[\s\-\"\'\(\[])\w/g, c => c.toUpperCase());
+    }
+    function toSentenceCase(s){
+      s = s.toLowerCase();
+      return s.replace(/(^\s*|[.!?]\s+)([a-z])/g, (m, start, ch) => start + ch.toUpperCase());
+    }
+
+    document.querySelectorAll('.caseBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const t = input.value;
+        const type = btn.getAttribute('data-case');
+        let out = t;
+        if(type==='upper') out = t.toUpperCase();
+        if(type==='lower') out = t.toLowerCase();
+        if(type==='title') out = toTitleCase(t);
+        if(type==='sentence') out = toSentenceCase(t);
+        input.value = out; updateCounters();
+      });
+    });
+
+    document.getElementById('trimSpaces').addEventListener('click',()=>{
+      input.value = input.value.replace(/\s+/g,' ').trim(); updateCounters();
+    });
+    document.getElementById('removeBreaks').addEventListener('click',()=>{
+      input.value = input.value.replace(/[\r\n]+/g,' '); updateCounters();
+    });
+
+    // Clipboard & download
+    document.getElementById('copyBtn').addEventListener('click', async()=>{
+      try { await navigator.clipboard.writeText(input.value); tempStatus('Copied'); } catch (e) { alert('Copy failed: ' + e.message); }
+    });
+    document.getElementById('downloadBtn').addEventListener('click', ()=>{
+      const blob = new Blob([input.value], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'text.txt'; a.click(); URL.revokeObjectURL(url);
+    });
+    document.getElementById('clearBtn').addEventListener('click', ()=>{ input.value=''; updateCounters(); suggestionsList.innerHTML=''; preview.textContent=''; });
+
+    function tempStatus(text){
+      statusBadge.textContent = text; statusBadge.classList.remove('hidden');
+      setTimeout(()=> statusBadge.classList.add('hidden'), 1600);
+    }
+
+    // Grammar check via LanguageTool public API
+    document.getElementById('checkBtn').addEventListener('click', async()=>{
+      const text = input.value.trim();
+      if(!text){ tempStatus('Enter text first'); return; }
+      tempStatus('Checking…');
+      suggestionsList.innerHTML = '';
+
+      try {
+        const params = new URLSearchParams();
+        params.append('text', text);
+        params.append('language', lang.value);
+
+        const res = await fetch('https://api.languagetool.org/v2/check', {
+          method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params
+        });
+        if(!res.ok) throw new Error('API error ' + res.status);
+        const data = await res.json();
+
+        // Build highlight ranges from matches
+        const ranges = data.matches.map(m => ({
+          start: m.offset,
+          end: m.offset + m.length,
+          message: m.message,
+          short: m.shortMessage || '',
+          replacements: (m.replacements || []).slice(0,3).map(r=>r.value),
+          type: m.rule && m.rule.issueType || 'style'
+        }));
+
+        // Generate highlighted HTML with tooltips
+        preview.innerHTML = renderHighlighted(text, ranges);
+
+        // Suggestions list
+        if(ranges.length === 0){
+          suggestionsList.innerHTML = '<li class="text-green-700">Great! No issues found.</li>';
+        } else {
+          ranges.forEach((r, i) => {
+            const li = document.createElement('li');
+            const label = r.type === 'misspelling' ? 'Spelling' : (r.type === 'grammar' ? 'Grammar' : 'Style');
+            li.className = 'p-3 rounded-xl border bg-slate-50';
+            li.innerHTML = `<div class="text-xs text-slate-500">${label}</div>
+              <div class="font-medium">${escapeHtml(r.short || r.message)}</div>
+              ${r.replacements.length ? `<div class="mt-1 text-slate-600 text-sm">Try: <span class="font-mono">${r.replacements.map(escapeHtml).join('</span>, <span class=\'font-mono\'>')}</span></div>` : ''}`;
+            suggestionsList.appendChild(li);
+          });
+        }
+        tempStatus('Done');
+      } catch (e) {
+        console.error(e);
+        tempStatus('Failed');
+        alert('Grammar check failed. Please try again.\n' + e.message);
+      }
+    });
+
+    function renderHighlighted(text, ranges){
+      // Merge and sort ranges by start
+      ranges.sort((a,b)=> a.start-b.start);
+      // Build HTML by slicing through text
+      let html = '';
+      let i = 0;
+      ranges.forEach((r, idx) => {
+        if(r.start > i) html += escapeHtml(text.slice(i, r.start));
+        const chunk = text.slice(r.start, r.end);
+        const cls = r.type === 'misspelling' ? 'underline-error' : 'underline-style';
+        const tip = escapeHtml((r.short || r.message) + (r.replacements.length? ('\nSuggestions: ' + r.replacements.join(', ')) : ''));
+        html += `<span class="relative ${cls}" onmouseenter="showTip(event, '${tip.replace(/'/g, "&#39;").replace(/\n/g, '<br/>')}')" onmouseleave="hideTip()">${escapeHtml(chunk)}</span>`;
+        i = r.end;
+      });
+      html += escapeHtml(text.slice(i));
+      return html;
+    }
+
+    // Simple tooltip controller
+    let tipEl = null;
+    window.showTip = (evt, html) => {
+      tipEl = document.createElement('div');
+      tipEl.className = 'tooltip';
+      tipEl.innerHTML = html;
+      document.body.appendChild(tipEl);
+      positionTip(evt);
+    }
+    window.hideTip = () => {
+      if(tipEl){ document.body.removeChild(tipEl); tipEl = null; }
+    }
+    window.addEventListener('mousemove', (e)=>{ if(tipEl) positionTip(e); });
+    function positionTip(e){
+      const pad = 12;
+      let x = e.clientX + pad; let y = e.clientY + pad;
+      tipEl.style.left = x + 'px'; tipEl.style.top = y + 'px';
+    }
+
+    function escapeHtml(s){
+      return s.replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'}[c]));
+    }
+  </script>
+</body>
+</html>
